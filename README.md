@@ -39,6 +39,24 @@ continuable(function (err) {
 });
 ```
 
+You don't have to store all the steps into variables, so you can simply chain the calls.
+
+Also if you're in an ES6 generator using [gen-run](https://github.com/creationix/gen-run), then consuming the continuable is even easier.
+
+```js
+var run = require('gen-run');
+var fs = require('min-fs');
+
+function* copy(source, dest) {
+  yield fs.write(dest)(fs.read(source));
+}
+
+run(function* () {
+  yield* copy("input.txt", "copy.txt");
+});
+```
+
+
 ## chroot(root) -> fs
 
 In addition to the exports object implementing the fs interface with respect to the filesystem root, you can also create a fs instance that is chrooted to some directory.
