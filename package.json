@@ -1,0 +1,27 @@
+{
+  "name": "min-fs",
+  "version": "0.1.1",
+  "description": "A node.js implementation of the min-stream and continuable based fs interface for js-git.",
+  "main": "fs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/creationix/min-fs.git"
+  },
+  "keywords": [
+    "min-stream",
+    "continuable",
+    "js-git",
+    "fs",
+    "interface"
+  ],
+  "author": "Tim Caswell <tim@creationix.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "fb3933591c65ded837f774ad9ab8edec5e9e511d",
+  "bugs": {
+    "url": "https://github.com/creationix/min-fs/issues"
+  }
+}
