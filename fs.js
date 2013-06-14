@@ -199,7 +199,12 @@ function write(path, options) {
       var next = dataQueue.shift();
       var err = next[0];
       var item = next[1];
-      if (item === undefined) return callback(err);
+      if (item === undefined) {
+        if (fd) return fs.close(fd, function () {
+          callback(err);
+        });
+        return callback(err);
+      }
       writing = true;
       fs.write(fd, item, 0, item.length, null, onWrite);
     }
