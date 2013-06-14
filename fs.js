@@ -6,31 +6,33 @@
 
 var fs = require('fs');
 var pathJoin = require('path').join;
+var pathResolve = require('path').resolve;
 
-module.exports = chroot;
-chroot.stat = stat;
-chroot.read = read;
-chroot.write = write;
-chroot.unlink = unlink;
-chroot.readlink = readlink;
-chroot.symlink = symlink;
-chroot.readdir = readdir;
-chroot.rmdir = rmdir;
-chroot.mkdir = mkdir;
+module.exports = exports = chroot;
+exports.stat = stat;
+exports.read = read;
+exports.write = write;
+exports.unlink = unlink;
+exports.readlink = readlink;
+exports.symlink = symlink;
+exports.readdir = readdir;
+exports.rmdir = rmdir;
+exports.mkdir = mkdir;
 
 function chroot(root) {
-
-  return {
-    stat: wrap(stat),
-    read: wrap(read),
-    write: wrap(write),
-    unlink: wrap(unlink),
-    readlink: wrap(readlink),
-    symlink: wrap(symlink),
-    readdir: wrap(readdir),
-    rmdir: wrap(rmdir),
-    mkdir: wrap(mkdir),
-  };
+  root = pathResolve(process.cwd(), root);
+  var exports = wrap(chroot);
+  exports.root = root;
+  exports.stat = wrap(stat);
+  exports.read = wrap(read);
+  exports.write = wrap(write);
+  exports.unlink = wrap(unlink);
+  exports.readlink = wrap(readlink);
+  exports.symlink = wrap(symlink);
+  exports.readdir = wrap(readdir);
+  exports.rmdir = wrap(rmdir);
+  exports.mkdir = wrap(mkdir);
+  return exports;
 
   function wrap(fn) {
     return function (path) {
