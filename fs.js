@@ -18,6 +18,7 @@ exports.symlink = symlink;
 exports.readdir = readdir;
 exports.rmdir = rmdir;
 exports.mkdir = mkdir;
+exports.rename = rename;
 
 function chroot(root) {
   root = pathResolve(process.cwd(), root);
@@ -32,6 +33,7 @@ function chroot(root) {
   exports.readdir = wrap(readdir);
   exports.rmdir = wrap(rmdir);
   exports.mkdir = wrap(mkdir);
+  exports.rename = wrap(rename);
   return exports;
 
   function wrap(fn) {
@@ -279,5 +281,11 @@ function rmdir(path) {
 function mkdir(path) {
   return function (callback) {
     fs.mkdir(path, callback);
+  };
+}
+
+function rename(source, target) {
+  return function (callback) {
+    fs.rename(source, target, callback);
   };
 }

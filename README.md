@@ -16,6 +16,7 @@ This module implements the following functions from the fs interface which is de
 - readdir(path) -> source<name>
 - rmdir(path) -> continuable
 - mkdir(path) -> continuable
+- rename(path, target) -> continuable
 
 ```js
 var fs = require('min-fs');
