@@ -12,6 +12,8 @@ module.exports = exports = chroot;
 exports.stat = stat;
 exports.read = read;
 exports.write = write;
+exports.readStream = readStream;
+exports.writeStream = writeStream;
 exports.unlink = unlink;
 exports.readlink = readlink;
 exports.symlink = symlink;
@@ -27,6 +29,8 @@ function chroot(root) {
   exports.stat = wrap(stat);
   exports.read = wrap(read);
   exports.write = wrap(write);
+  exports.readStream = wrap(readStream);
+  exports.writeStream = wrap(writeStream);
   exports.unlink = wrap(unlink);
   exports.readlink = wrap(readlink);
   exports.symlink = wrap(symlink);
@@ -68,10 +72,22 @@ function stat(path) {
   };
 }
 
+function read(path, encoding) {
+  return function (callback) {
+    fs.readFile(path, encoding, callback);
+  };
+}
+
+function write(path, value, encoding) {
+  return function (callback) {
+    fs.writeFile(path, value, encoding, callback);
+  };
+}
+
 // Given a path and options return a stream source of the file.
 // options.start the start offset in bytes
 // options.end the offset of the last byte to read
-function read(path, options) {
+function readStream(path, options) {
   options = options || {};
   var position = options.start;
   var fd, locked;
@@ -162,7 +178,7 @@ function read(path, options) {
 
 }
 
-function write(path, options) {
+function writeStream(path, options) {
   options = options || {};
   var dataQueue = [];
   var read, fd, reading, writing;
