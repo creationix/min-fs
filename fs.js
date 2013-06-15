@@ -33,12 +33,13 @@ function chroot(root) {
   exports.readdir = wrap(readdir);
   exports.rmdir = wrap(rmdir);
   exports.mkdir = wrap(mkdir);
-  exports.rename = wrap(rename);
+  exports.rename = wrap(rename, true);
   return exports;
 
-  function wrap(fn) {
-    return function (path) {
-      arguments[0] = pathJoin(root, pathJoin("/", path));
+  function wrap(fn, two) {
+    return function () {
+      arguments[0] = pathJoin(root, pathJoin("/", arguments[0]));
+      if (two) arguments[1] = pathJoin(root, pathJoin("/", arguments[1]));
       return fn.apply(this, arguments);
     };
   }
