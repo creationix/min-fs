@@ -8,8 +8,10 @@ A node.js implementation of the min-stream and continuable based fs interface fo
 This module implements the following functions from the fs interface which is described in detail at <https://github.com/creationix/js-git/blob/master/specs/fs.md>
 
 - stat(path) -> continuable<stat>
-- read(path) -> source<binary>
-- write(path) -> sink<binary>
+- read(path, [encoding]) -> continuable<value>
+- write(path, value, [encoding]) -> continuable
+- readStream(path, [options]) -> source<binary>
+- writeStream(path, [options]) -> sink<binary>
 - unlink(path) -> continuable
 - readlink(path) -> continuable<target>
 - symlink(path, target) -> continuable
@@ -24,10 +26,10 @@ var fs = require('min-fs');
 // Streaming copy a file
 
 // Set up a source, the file isn't actually opened till the stream is read from.
-var source = fs.read("input.txt");
+var source = fs.readStream("input.txt");
 
 // Set up a sink.  The file isn't actually opened yet.
-var sink = fs.write("copy.txt");
+var sink = fs.writeStream("copy.txt");
 
 // Hook the source to the sink, but still don't create either file or start moving yet.
 var continuable = sink(source);
@@ -49,7 +51,7 @@ var run = require('gen-run');
 var fs = require('min-fs');
 
 function* copy(source, dest) {
-  yield fs.write(dest)(fs.read(source));
+  yield fs.writeStream(dest)(fs.readStream(source));
 }
 
 run(function* () {
@@ -66,5 +68,5 @@ In addition to the exports object implementing the fs interface with respect to 
 var fs = require('min-fs')("/home/tim/Code/js-git/.git");
 
 // read the first chunk in the staging area's index.
-fs.read("/index")(null, console.log);
+fs.readStream("/index")(null, console.log);
 ```
